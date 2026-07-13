@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امتحان التربية المهنية  - الصف التاسع</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange:#F97316;--orange-dark:#EA580C;--orange-light:#FED7AA;--orange-xlight:#FFF7ED;
+    --white:#FFFFFF;--gray-100:#F5F5F5;--gray-200:#E5E5E5;--gray-400:#A3A3A3;
+    --gray-600:#525252;--gray-800:#262626;--green:#16A34A;--red:#DC2626;
+    --shadow:0 4px 24px rgba(249,115,22,0.10);--radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Cairo',sans-serif;background:var(--orange-xlight);min-height:100vh;color:var(--gray-800);}
+  .site-header{background:var(--orange);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(249,115,22,0.3);}
+  .hdr-title{color:#fff;font-size:19px;font-weight:700;line-height:1.4;}
+  .hdr-sub{color:var(--orange-light);font-size:12px;margin-top:3px;}
+  .hdr-icon{width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+  .screen{display:none;}.screen.active{display:block;}
+  .start-card{max-width:500px;margin:36px auto;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .card-top{background:var(--orange);padding:28px 28px 22px;text-align:center;}
+  .card-top .big-icon{font-size:56px;margin-bottom:10px;}
+  .card-top h2{color:#fff;font-size:20px;font-weight:700;margin-bottom:4px;}
+  .unit-tag{background:rgba(255,255,255,0.22);color:#fff;border-radius:20px;padding:5px 16px;font-size:13px;font-weight:600;display:inline-block;margin-top:6px;}
+  .card-body{padding:24px 28px;}
+  .teacher-credit{background:var(--orange-xlight);border:1px solid var(--orange-light);border-radius:10px;padding:12px 16px;margin-bottom:18px;text-align:center;}
+  .tc-label{font-size:12px;color:var(--gray-600);margin-bottom:4px;}
+  .tc-name{font-size:15px;font-weight:700;color:var(--orange-dark);}
+  .tc-phone{display:inline-flex;align-items:center;gap:6px;margin-top:6px;background:var(--orange);color:#fff;border-radius:8px;padding:6px 14px;font-size:14px;font-weight:700;text-decoration:none;transition:background .2s;}
+  .tc-phone:hover{background:var(--orange-dark);}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .chip{background:var(--orange-xlight);color:var(--orange-dark);border:1px solid var(--orange-light);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:600;}
+  .field{margin-bottom:20px;}
+  .field label{font-size:14px;font-weight:600;display:block;margin-bottom:8px;}
+  .field input{width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:10px;font-family:'Cairo',sans-serif;font-size:15px;outline:none;transition:border .2s;text-align:right;}
+  .field input:focus{border-color:var(--orange);}
+  .btn-start{width:100%;background:var(--orange);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Cairo',sans-serif;font-size:17px;font-weight:700;cursor:pointer;transition:background .2s,transform .1s;}
+  .btn-start:hover{background:var(--orange-dark);transform:translateY(-1px);}
+  .btn-start:disabled{background:var(--gray-400);cursor:not-allowed;transform:none;}
+  .topbar{background:#fff;border-bottom:2px solid var(--orange-light);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+  .timer{background:var(--orange);color:#fff;border-radius:10px;padding:7px 18px;font-size:20px;font-weight:700;letter-spacing:2px;min-width:86px;text-align:center;transition:background .3s;}
+  .timer.warn{background:var(--red);animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+  .prog-info{font-size:13px;color:var(--gray-600);font-weight:600;}
+  .sname-tag{font-size:13px;color:var(--orange-dark);font-weight:700;}
+  .exam-body{max-width:700px;margin:0 auto;padding:24px 16px;}
+  .pbar-bg{background:var(--gray-200);border-radius:10px;height:7px;overflow:hidden;margin-bottom:22px;}
+  .pbar-fill{background:var(--orange);height:100%;border-radius:10px;transition:width .4s;}
+  .qcard{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 22px;margin-bottom:16px;border-right:5px solid var(--orange);}
+  .qnum{font-size:11px;font-weight:700;color:var(--orange);background:var(--orange-xlight);border-radius:6px;padding:3px 10px;display:inline-block;margin-bottom:10px;}
+  .qtext{font-size:16px;font-weight:600;line-height:1.8;margin-bottom:16px;}
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{display:flex;align-items:center;gap:12px;padding:11px 15px;border:2px solid var(--gray-200);border-radius:10px;cursor:pointer;transition:all .18s;font-size:15px;font-weight:500;user-select:none;}
+  .opt:hover{border-color:var(--orange);background:var(--orange-xlight);}
+  .opt input{display:none;}
+  .opt.sel{border-color:var(--orange);background:var(--orange-xlight);color:var(--orange-dark);font-weight:700;}
+  .odot{width:20px;height:20px;border:2px solid var(--gray-400);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+  .opt.sel .odot{border-color:var(--orange);background:var(--orange);}
+  .opt.sel .odot::after{content:'';width:7px;height:7px;background:#fff;border-radius:50%;display:block;}
+  .oletter{font-weight:700;color:var(--orange);min-width:20px;}
+  .submit-wrap{text-align:center;margin:28px 0 48px;}
+  .btn-sub{background:var(--orange);color:#fff;border:none;border-radius:12px;padding:14px 44px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:background .2s,transform .1s;box-shadow:0 4px 16px rgba(249,115,22,.3);}
+  .btn-sub:hover{background:var(--orange-dark);transform:translateY(-2px);}
+  .res-card{max-width:520px;margin:36px auto;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .res-top{padding:32px 28px;text-align:center;}
+  .res-emoji{font-size:70px;margin-bottom:12px;}
+  .res-name{font-size:17px;color:var(--gray-600);margin-bottom:8px;}
+  .res-score{font-size:72px;font-weight:900;color:var(--orange);line-height:1;margin:8px 0 4px;}
+  .res-of{font-size:18px;color:var(--gray-400);margin-bottom:6px;}
+  .res-pct{font-size:24px;font-weight:700;}
+  .res-body{padding:0 28px 28px;}
+  .review h3{font-size:15px;font-weight:700;margin-bottom:12px;border-bottom:2px solid var(--orange-light);padding-bottom:8px;}
+  .ri{padding:10px 14px;margin-bottom:8px;font-size:14px;line-height:1.7;}
+  .ri.bad{background:#FEF2F2;border-right:4px solid var(--red);border-radius:0;}
+  .ri.na{background:var(--gray-100);border-right:4px solid var(--gray-400);border-radius:0;}
+  .rq{font-weight:600;}.rd{font-size:12px;margin-top:3px;}
+  .rc{color:var(--green);font-weight:600;}.rw{color:var(--red);}
+  .all-ok{text-align:center;padding:16px;background:#F0FDF4;border-radius:10px;color:#15803D;font-weight:700;font-size:15px;}
+  .t-btn-wrap{text-align:center;margin:28px 0 8px;}
+  .btn-t{background:transparent;border:2px solid var(--gray-200);color:var(--gray-400);border-radius:8px;padding:8px 20px;font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;}
+  .btn-t:hover{border-color:var(--orange);color:var(--orange-dark);}
+  .t-screen{max-width:860px;margin:0 auto;padding:28px 16px;}
+  .t-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
+  .t-hdr h2{font-size:20px;font-weight:700;color:var(--orange-dark);}
+  .btn-exp{background:var(--orange);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;}
+  .btn-exp:hover{background:var(--orange-dark);}
+  .btn-back{background:transparent;border:2px solid var(--gray-200);color:var(--gray-600);border-radius:8px;padding:10px 16px;font-family:'Cairo',sans-serif;font-size:14px;cursor:pointer;}
+  .tbl-wrap{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow);}
+  .tbl{width:100%;border-collapse:collapse;background:#fff;}
+  .tbl th{background:var(--orange);color:#fff;padding:14px 16px;font-size:14px;font-weight:700;text-align:right;}
+  .tbl td{padding:12px 16px;font-size:14px;border-bottom:1px solid var(--gray-100);}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tbl tr:hover td{background:var(--orange-xlight);}
+  .badge{display:inline-block;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px;}
+  .ba{background:#DCFCE7;color:#15803D;}.bb{background:#FEF9C3;color:#854D0E;}.bc{background:#FEE2E2;color:#B91C1C;}
+  .empty{text-align:center;padding:48px;color:var(--gray-400);font-size:16px;}
+  .status-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:16px;}
+  .status-bar.ok{background:#F0FDF4;color:#15803D;}
+  .status-bar.err{background:#FEF2F2;color:#B91C1C;}
+  .status-bar.loading{background:var(--orange-xlight);color:var(--orange-dark);}
+  .dot-spin{width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .rec-count{font-size:13px;color:var(--gray-600);margin-bottom:12px;font-weight:600;}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100;}
+  .modal{background:#fff;border-radius:var(--radius);padding:30px 26px;width:310px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+  .modal h3{font-size:17px;font-weight:700;margin-bottom:7px;color:var(--orange-dark);}
+  .modal p{font-size:13px;color:var(--gray-600);margin-bottom:18px;}
+  .modal input{width:100%;padding:11px 14px;border:2px solid var(--gray-200);border-radius:8px;font-family:'Cairo',sans-serif;font-size:15px;text-align:center;outline:none;margin-bottom:14px;transition:border .2s;}
+  .modal input:focus{border-color:var(--orange);}
+  .mbts{display:flex;gap:10px;}
+  .mbts button{flex:1;padding:10px;border-radius:8px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;}
+  .mok{background:var(--orange);color:#fff;}.mcancel{background:var(--gray-100);color:var(--gray-600);}
+  .merr{color:var(--red);font-size:12px;margin-top:-6px;margin-bottom:10px;min-height:16px;}
+  .loader-bg{position:fixed;inset:0;background:rgba(255,247,237,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;gap:14px;}
+  .spin{width:38px;height:38px;border:4px solid var(--orange-light);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
+  .ltxt{font-size:15px;color:var(--orange-dark);font-weight:600;}
+  @media(max-width:560px){.start-card,.res-card{margin:16px 10px;}.card-body,.res-body{padding:18px 16px;}.exam-body{padding:14px 10px;}.topbar{padding:10px 12px;}.timer{font-size:17px;padding:6px 13px;}}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div>
+    <div class="hdr-title">اختبار التربية المهنية— الصف التاسع</div>
+    <div class="hdr-sub">الوحدة الرابعة و الخامسة</div>
+  </div>
+  <div class="hdr-icon">🗳️</div>
+</div>
+
+<div id="loader" class="loader-bg" style="display:none">
+  <div class="spin"></div><div class="ltxt" id="ltxt">جاري التحميل...</div>
+</div>
+
+<!-- START -->
+<div id="s-start" class="screen active">
+  <div class="start-card">
+    <div class="card-top">
+      <div class="big-icon">📝</div>
+      <h2>اختبار التربية المهنية</h2>
+      <div style="color:rgba(255,255,255,.9);font-size:14px;margin-top:4px;">الصف التاسع — الفصل الأول</div>
+      <div class="unit-tag">الوحدة الرابعة و الخامسة</div>
+    </div>
+    <div class="card-body">
+      <div class="teacher-credit">
+        <div class="tc-label">هذا الاختبار تابع لصفحة ملخصات المعلمة</div>
+        <div class="tc-name">✨ آلاء عمر ✨</div>
+        <a href="tel:0797186635" class="tc-phone">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          للتواصل: 0797186635
+        </a>
+      </div>
+      <div class="chips">
+        <span class="chip">⏱ 10 دقائق</span>
+        <span class="chip">📋 10 أسئلة</span>
+        <span class="chip">✅ اختيار متعدد</span>
+      </div>
+      <div class="field">
+        <label>اكتب اسمك الكامل:</label>
+        <input type="text" id="sname-in" placeholder="الاسم الكامل" oninput="chkName()">
+      </div>
+      <button class="btn-start" id="btn-start" onclick="startExam()" disabled>ابدأ الاختبار ←</button>
+    </div>
+  </div>
+  <div class="t-btn-wrap"><button class="btn-t" onclick="showPwdModal()">🔒 لوحة المعلم</button></div>
+</div>
+
+<!-- EXAM -->
+<div id="s-exam" class="screen">
+  <div class="topbar">
+    <div>
+      <div class="sname-tag" id="tb-name"></div>
+      <div class="prog-info" id="tb-prog"></div>
+    </div>
+    <div class="timer" id="timer">10:00</div>
+  </div>
+  <div class="exam-body">
+    <div class="pbar-bg"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
+    <div id="qcont"></div>
+    <div class="submit-wrap">
+      <button class="btn-sub" onclick="submitExam(false)">إنهاء الاختبار وعرض النتيجة ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="s-result" class="screen">
+  <div class="res-card">
+    <div class="res-top">
+      <div class="res-emoji" id="r-emoji"></div>
+      <div class="res-name" id="r-name"></div>
+      <div class="res-score" id="r-score"></div>
+      <div class="res-of">من 10 درجات</div>
+      <div class="res-pct" id="r-pct"></div>
+    </div>
+    <div class="res-body">
+      <div class="review" id="r-review"></div>
+    </div>
+  </div>
+  <div class="t-btn-wrap"><button class="btn-t" onclick="showPwdModal()">🔒 لوحة المعلم</button></div>
+</div>
+
+<!-- TEACHER -->
+<div id="s-teacher" class="screen">
+  <div class="t-screen">
+    <div class="t-hdr">
+      <h2>📊 سجل نتائج الطلاب</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-exp" onclick="loadTeacher()">🔄 تحديث</button>
+        <button class="btn-exp" onclick="doExport()">تصدير CSV ⬇</button>
+        <button class="btn-exp" style="background:#DC2626" onclick="doClear()">حذف السجل 🗑</button>
+        <button class="btn-back" onclick="goBack()">← رجوع</button>
+      </div>
+    </div>
+    <div id="t-status" class="status-bar loading" style="display:none">
+      <div class="dot-spin" id="t-spin"></div>
+      <span id="t-status-txt"></span>
+    </div>
+    <div id="rec-count" class="rec-count"></div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>اسم الطالب</th><th>الدرجة</th><th>النسبة</th><th>التقدير</th><th>وقت التقديم</th></tr></thead>
+        <tbody id="t-tbody"></tbody>
+      </table>
+    </div>
+    <div id="t-empty" class="empty" style="display:none">لا يوجد طلاب في السجل بعد</div>
+  </div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div id="pwd-modal" class="modal-bg" style="display:none">
+  <div class="modal">
+    <h3>🔒 لوحة المعلم</h3>
+    <p>أدخل كلمة المرور للوصول إلى نتائج الطلاب</p>
+    <input type="password" id="pwd-in" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')okPwd()">
+    <div class="merr" id="pwd-err"></div>
+    <div class="mbts">
+      <button class="mok" onclick="okPwd()">دخول</button>
+      <button class="mcancel" onclick="closePwd()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PWD = "teacher123";
+const EXAM_SECS = 10 * 60;
+const STORAGE_KEY = "exam6_records_v4";
+
+async function storeSave(record) {
+  try { const e = await storeGetAll(); e.push(record); await window.storage.set(STORAGE_KEY, JSON.stringify(e)); return true; }
+  catch(e) { lSave(record); return false; }
+}
+async function storeGetAll() {
+  try { const r = await window.storage.get(STORAGE_KEY); if(!r) return []; return JSON.parse(r.value)||[]; }
+  catch(e) { return []; }
+}
+async function storeClear() {
+  try { await window.storage.delete(STORAGE_KEY); return true; } catch(e) { return false; }
+}
+function lGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]; } catch { return []; } }
+function lSave(r) { const a=lGet(); a.unshift(r); localStorage.setItem(STORAGE_KEY,JSON.stringify(a)); }
+function lClear() { localStorage.removeItem(STORAGE_KEY); }
+function load(t) { document.getElementById("ltxt").textContent=t||"..."; document.getElementById("loader").style.display="flex"; }
+function unload() { document.getElementById("loader").style.display="none"; }
+function show(id) { document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); window.scrollTo(0,0); }
+function setStatus(type,msg) {
+  const el=document.getElementById("t-status"),spin=document.getElementById("t-spin"),txt=document.getElementById("t-status-txt");
+  el.style.display="flex"; el.className="status-bar "+type; spin.style.display=type==="loading"?"block":"none"; txt.textContent=msg;
+}
+
+// ══ QUESTIONS ═════════════════════════════════════════════════════════
+const qs = [
+  {
+    t: "الفائدة الجوهرية من توفير الحاجات الأساسية للطفل ذي الإعاقة:",
+    o: [
+      "تساعده على تحقيق استقلاليته وتعزيز قدراته ومهاراته",
+      "تخفيف الأعباء المالية عن الأسرة والمجتمع بشكل مباشر",
+      "توفير الوقت والجهد على الكوادر التعليمية في المدرسة"
+    ],
+    c: 0
+  },
+  {
+    t: "يُصنف دمج الطفل ذي الإعاقة في الأنشطة المجتمعية ضمن الحاجات:",
+    o: [
+      "النفسية والاجتماعية",
+      "التعليمية والتأهيلية",
+      "الترفيهية والثقافية"
+    ],
+    c: 0
+  },
+  {
+    t: "الغاية الرئيسة من إطلاق وزارة التربية والتعليم للخطة التنفيذية للاستراتيجية العشرية للتعليم الدامج هي:",
+    o: [
+      "تسريع وتيرة التحول الرقمي في المدارس الحكومية",
+      "توفير بيئة تعليمية خاصة منعزلة للطلبة ذوي الإعاقة",
+      "ضمان حقوق الأشخاص ذوي الإعاقة في التعليم"
+    ],
+    c: 2
+  },
+  {
+    t: "أي مما يأتي يعبر بدقة عن الأهمية الاستراتيجية للتخطيط:",
+    o: [
+      "أداة أساسية لاتخاذ قرارات مدروسة وتوجيه الجهود نحو نتائج قابلة للتحقيق",
+      "التخطيط يغني عن الحاجة إلى دراسة السوق أو فهم احتياجات المستفيدين",
+      "ضمان سرعة التنفيذ دون الحاجة إلى مراجعة المراحل السابقة"
+    ],
+    c: 0
+  },
+  {
+    t: "الخطوة الثالثة في التخطيط للمشروع الريادي الناجح:",
+    o: [
+      "تحديد الموارد",
+      "تنفيذ الخطة",
+      "التقييم والتطوير"
+    ],
+    c: 0
+  },
+  {
+    t: "الهدف الأسمى لتوظيف مفاهيم الإبداع والابتكار في المشاريع الريادية هو:",
+    o: [
+      "تقليل عدد الموظفين المطلوبين لتشغيل المشروع",
+      "إيجاد حلول مبتكرة لتحديات حقيقية",
+      "ضمان تحقيق الربح المادي في أقل فترة زمنية ممكنة"
+    ],
+    c: 1
+  },
+  {
+    t: "من الأمثلة على الإبداع والابتكار في مشروع ما:",
+    o: [
+      "زيادة ساعات العمل لضمان إنتاج كمية أكبر من المنتج",
+      "تطوير خدمة توصيل صديقة للبيئة باستخدام تقنيات ذكية",
+      "الالتزام الحرفي بالخطط التقليدية المعمول بها في السوق"
+    ],
+    c: 1
+  },
+  {
+    t: "كيف تُسهم المرونة والتكيف في تعزيز استدامة المشروع:",
+    o: [
+      "من خلال زيادة استهلاك الموارد المتاحة لتعزيز النمو السريع",
+      "بضمان قدرة المشروع على الاستمرار في النجاح رغم التحديات",
+      "عن طريق تثبيت طرق العمل وعدم تغييرها لضمان ثبات الجودة"
+    ],
+    c: 1
+  },
+  {
+    t: "أي من المهارات التالية تُعد ركيزة أساسية لنجاح ريادة الأعمال:",
+    o: [
+      "التبعية الوظيفية",
+      "التخطيط الجامد",
+      "التفكير الإبداعي"
+    ],
+    c: 2
+  },
+  {
+    t: "الدور الذي يلعبه التقييم والتطوير في عملية التخطيط للمشروع هو:",
+    o: [
+      "توفير ميزانية إضافية للمشاريع المستقبلية",
+      "يساعد على معرفة ما الذي يحتاج إلى تحسين",
+      "إثبات تفوق المشروع على المنافسين في السوق المحلي"
+    ],
+    c: 1
+  }
+];
+const L=["أ","ب","ج"];
+let studentName="",timerInt,secs=EXAM_SECS,ans=new Array(qs.length).fill(null);
+
+function chkName(){document.getElementById("btn-start").disabled=document.getElementById("sname-in").value.trim().length<2;}
+function startExam(){
+  studentName=document.getElementById("sname-in").value.trim();
+  document.getElementById("tb-name").textContent="الطالب: "+studentName;
+  secs=EXAM_SECS; ans=new Array(qs.length).fill(null);
+  show("s-exam"); renderQs(); updProg(); startTimer();
+}
+function renderQs(){
+  const c=document.getElementById("qcont"); c.innerHTML="";
+  qs.forEach((q,i)=>{
+    const d=document.createElement("div"); d.className="qcard";
+    d.innerHTML=`<div class="qnum">السؤال ${i+1} من ${qs.length}</div>
+      <div class="qtext">${q.t}</div>
+      <div class="opts">${q.o.map((o,j)=>`
+        <label class="opt" id="o${i}_${j}" onclick="pick(${i},${j})">
+          <input type="radio" name="q${i}">
+          <div class="odot"></div>
+          <span class="oletter">${L[j]}-</span>
+          <span>${o}</span>
+        </label>`).join("")}</div>`;
+    c.appendChild(d);
+  });
+}
+function pick(i,j){
+  ans[i]=j;
+  qs[i].o.forEach((_,k)=>document.getElementById(`o${i}_${k}`).classList.toggle("sel",k===j));
+  updProg();
+}
+function updProg(){
+  const a=ans.filter(x=>x!==null).length;
+  document.getElementById("pbar").style.width=(a/qs.length*100)+"%";
+  document.getElementById("tb-prog").textContent=`تم الإجابة على ${a} من ${qs.length}`;
+}
+function startTimer(){
+  updTimer();
+  timerInt=setInterval(()=>{secs--;updTimer();if(secs<=0){clearInterval(timerInt);submitExam(true);}},1000);
+}
+function updTimer(){
+  const m=String(Math.floor(secs/60)).padStart(2,"0"),s=String(secs%60).padStart(2,"0");
+  const el=document.getElementById("timer"); el.textContent=m+":"+s;
+  el.classList.toggle("warn",secs<=60);
+}
+async function submitExam(timeout){
+  clearInterval(timerInt);
+  if(!timeout){const u=ans.filter(x=>x===null).length;if(u>0&&!confirm(`لم تجب على ${u} سؤال. هل تريد الإنهاء الآن؟`))return;}
+  await showResult();
+}
+async function showResult(){
+  let correct=0; ans.forEach((a,i)=>{if(a===qs[i].c)correct++;});
+  const pct=Math.round(correct/qs.length*100),isPerfect=correct===qs.length;
+  const grade=pct>=80?"ممتاز":pct>=60?"جيد":pct>=50?"مقبول":"راجع دروسك";
+  const col=pct>=80?"#16A34A":pct>=60?"#D97706":pct>=50?"#EA580C":"#DC2626";
+  const emoji=isPerfect?"🏆":pct>=80?"🌟":pct>=60?"😊":"📚";
+  document.getElementById("r-emoji").textContent=emoji;
+  document.getElementById("r-name").innerHTML=isPerfect?`<span style="color:#16A34A;font-weight:700">أحسنت يا ${studentName}! 🎉</span>`:`<span>${studentName}</span>`;
+  document.getElementById("r-score").textContent=correct;
+  document.getElementById("r-pct").innerHTML=`<span style="color:${col}">${pct}% — ${grade}</span>`;
+  const rc=document.getElementById("r-review"); rc.innerHTML="";
+  const wrong=qs.map((q,i)=>({q,i,u:ans[i]})).filter(({q,u})=>u!==q.c);
+  if(wrong.length===0){rc.innerHTML=`<div class="all-ok">🎊 ممتاز! لا توجد أي إجابة خاطئة</div>`;}
+  else{
+    const h=document.createElement("h3");h.textContent="الإجابات التي تحتاج مراجعة:";rc.appendChild(h);
+    wrong.forEach(({q,i,u})=>{
+      const na=u===null,div=document.createElement("div");div.className=na?"ri na":"ri bad";
+      div.innerHTML=`<div class="rq">س${i+1}: ${q.t}</div>
+        <div class="rd">${na?`لم تجب — الصحيحة: <span class="rc">${L[q.c]}- ${q.o[q.c]}</span>`:`<span class="rw">إجابتك: ${L[u]}- ${q.o[u]}</span> | الصحيحة: <span class="rc">${L[q.c]}- ${q.o[q.c]}</span>`}</div>`;
+      rc.appendChild(div);
+    });
+  }
+  const record={name:studentName,correct,total:qs.length,pct,grade,time:new Date().toLocaleString("ar-JO"),ts:new Date().toISOString()};
+  load("جاري حفظ نتيجتك..."); await storeSave(record); unload(); show("s-result");
+}
+async function loadTeacher(){
+  setStatus("loading","جاري تحميل سجل الطلاب...");
+  try{const recs=await storeGetAll();renderTable(recs);setStatus("ok",`✅ تم تحميل ${recs.length} سجل من جميع الأجهزة`);}
+  catch(e){const recs=lGet();renderTable(recs);setStatus("err",`⚠️ يتم عرض ${recs.length} سجل محلي فقط`);}
+}
+function renderTable(recs){
+  const tb=document.getElementById("t-tbody"),em=document.getElementById("t-empty"),rc=document.getElementById("rec-count");
+  tb.innerHTML="";
+  if(!recs||recs.length===0){em.style.display="block";rc.textContent="";return;}
+  em.style.display="none"; rc.textContent=`إجمالي عدد الطلاب الذين أدوا الاختبار: ${recs.length}`;
+  [...recs].sort((a,b)=>new Date(b.ts)-new Date(a.ts)).forEach((r,i)=>{
+    const bc=r.pct>=80?"ba":r.pct>=60?"bb":"bc",bt=r.pct>=80?"ممتاز":r.pct>=60?"جيد":r.pct>=50?"مقبول":"ضعيف";
+    tb.innerHTML+=`<tr><td>${i+1}</td><td><strong>${r.name}</strong></td><td style="font-weight:700;color:var(--orange-dark);font-size:16px">${r.correct}/${r.total}</td><td>${r.pct}%</td><td><span class="badge ${bc}">${bt}</span></td><td style="color:var(--gray-600);font-size:12px">${r.time}</td></tr>`;
+  });
+}
+async function doExport(){
+  load("جاري تحضير الملف..."); let recs=await storeGetAll(); if(!recs||recs.length===0)recs=lGet(); unload();
+  if(!recs||recs.length===0){alert("لا يوجد بيانات للتصدير");return;}
+  let csv="\uFEFFالاسم,الدرجة,من,النسبة,التقدير,الوقت\n";
+  recs.forEach(r=>{csv+=`${r.name},${r.correct},${r.total},${r.pct}%,${r.grade||""},${r.time}\n`;});
+  const a=document.createElement("a"); a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
+  a.download="نتائج_دراسات_سابع_وحدة2_الديمقراطية_وحقوق_الانسان.csv"; a.click();
+}
+async function doClear(){
+  if(!confirm("هل أنت متأكد من حذف جميع السجلات نهائياً؟"))return;
+  load("جاري الحذف..."); await storeClear(); lClear(); unload(); renderTable([]); setStatus("ok","✅ تم حذف جميع السجلات");
+}
+function goBack(){show("s-start");}
+function showPwdModal(){document.getElementById("pwd-in").value="";document.getElementById("pwd-err").textContent="";document.getElementById("pwd-modal").style.display="flex";setTimeout(()=>document.getElementById("pwd-in").focus(),100);}
+function closePwd(){document.getElementById("pwd-modal").style.display="none";}
+function okPwd(){
+  if(document.getElementById("pwd-in").value===PWD){closePwd();loadTeacher();show("s-teacher");}
+  else{document.getElementById("pwd-err").textContent="كلمة المرور غير صحيحة";}
+}
+document.getElementById("pwd-modal").addEventListener("click",function(e){if(e.target===this)closePwd();});
+</script>
+</body>
+</html>
